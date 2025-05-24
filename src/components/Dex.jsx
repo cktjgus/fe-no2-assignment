@@ -1,14 +1,18 @@
-// src/components/Dex.jsx
 import React from "react";
 import Dashboard from "./Dashboard";
-import PList from "./PokemonList";
+import PokemonList from "./PokemonList";
 import styled from "styled-components";
+import { usePokemon } from "../context/PokemonContext";
 
 const DexWrapper = styled.div`
-  padding: 32px; background: #faebd7; min-height: 100vh;
+  padding: 32px;
+  background: #faebd7;
+  min-height: 100vh;
 `;
 
-function Dex({ mockData, selected, setSelected }) {
+function Dex({ mockData }) {
+  const { selected, setSelected } = usePokemon();
+
   const handleAdd = (pokemon) => {
     if (selected.find(p => p.id === pokemon.id)) {
       alert("이미 선택된 포켓몬입니다.");
@@ -21,25 +25,12 @@ function Dex({ mockData, selected, setSelected }) {
     setSelected([...selected, pokemon]);
   };
 
-  const handleRemove = (idx) => {
-    setSelected(selected.filter((_, i) => i !== idx));
-  };
-
-  React.useEffect(() => {
-    console.log("selected 상태 변화:", selected);
-  }, [selected]);
-
   return (
     <DexWrapper>
-      <Dashboard selected={selected} onRemove={handleRemove} />
-      <PList
-        mockData={mockData}
-        onAdd={handleAdd}
-        selected={selected}
-      />
+      <Dashboard />
+      <PokemonList mockData={mockData} onAdd={handleAdd} />
     </DexWrapper>
   );
 }
-
 
 export default Dex;

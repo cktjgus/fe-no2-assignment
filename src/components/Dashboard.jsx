@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import pokeballImg from "../assets/pokeball.png";
+import { usePokemon } from "../context/PokemonContext";
 
 const Dash = styled.div`
   margin-bottom: 32px;
@@ -87,7 +88,13 @@ const Title = styled.div`
   margin-left: 6px;
 `;
 
-function Dashboard({ selected, onRemove }) {
+function Dashboard() {
+  const { selected, setSelected } = usePokemon();
+
+  const handleRemove = (idx) => {
+    setSelected(selected.filter((_, i) => i !== idx));
+  };
+
   return (
     <div>
       <Dash>
@@ -100,7 +107,7 @@ function Dashboard({ selected, onRemove }) {
                 <PokemonImg src={selected[idx].img_url} alt={selected[idx].korean_name} />
                 <Name>{selected[idx].korean_name}</Name>
                 <Number>No. {String(selected[idx].id).padStart(3, "0")}</Number>
-                <RemoveBtn onClick={() => onRemove(idx)}>삭제</RemoveBtn>
+                <RemoveBtn onClick={() => handleRemove(idx)}>삭제</RemoveBtn>
               </Slot>
             ) : (
               <PokeballWrap key={`slot-${idx}`}>

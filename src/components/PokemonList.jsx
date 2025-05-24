@@ -1,6 +1,7 @@
 import React from "react";
 import PokemonCard from "./PokemonCard";
 import styled from "styled-components";
+import { usePokemon } from "../context/PokemonContext";
 
 const ListWrapper = styled.div`
   display: grid;
@@ -8,7 +9,8 @@ const ListWrapper = styled.div`
   gap: 20px;
 `;
 
-function PokemonList({ mockData, onAdd, selected }) {
+function PokemonList({ mockData, onAdd }) {
+  const { selected } = usePokemon();
   return (
     <ListWrapper>
       {mockData.map((pokemon) => (

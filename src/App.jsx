@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
+import { PokemonProvider } from "./context/PokemonContext";
 import Home from "./components/Home";
 import Dex from "./components/Dex";
 import Detail from "./components/Detail";
-import mockData from "./mock"; 
+import mockData from "./mock";
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -22,30 +23,18 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const [selected, setSelected] = useState([]);
   return (
-    <>
+    <PokemonProvider>
       <GlobalStyle />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/dex"
-            element={
-              <Dex
-                mockData={mockData}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            }
-          />
-          <Route
-            path="/detail/:id"
-            element={<Detail mockData={mockData} />}
-          />
+          <Route path="/dex" element={<Dex mockData={mockData} />} />
+          <Route path="/detail/:id" element={<Detail mockData={mockData} />} />
         </Routes>
       </Router>
-    </>
+    </PokemonProvider>
+
   );
 }
 

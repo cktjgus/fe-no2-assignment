@@ -55,9 +55,8 @@ function PokemonCard({ pokemon, onAdd, isSelected }) {
           e.stopPropagation();
           onAdd(pokemon);
         }}
-        disabled={isSelected}
       >
-        {isSelected ? "선택됨" : "추가"}
+        {isSelected = "추가"}
       </AddBtn>
     </Card>
   );

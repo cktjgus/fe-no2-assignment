@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { usePokemon } from "../context/PokemonContext";
 
 const DetailWrap = styled.div`
   max-width: 480px;
@@ -14,7 +15,7 @@ const DetailWrap = styled.div`
   align-items: center;
 `;
 
-const BackBtn = styled.button`
+const ActionBtn = styled.button`
   margin-top: 24px;
   background: #b71c1c;
   color: #fff;
@@ -25,6 +26,12 @@ const BackBtn = styled.button`
   cursor: pointer;
 `;
 
+const BtnGroup = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+`;
+
 const Desc = styled.div`
   margin: 16px 0;
   text-align: center;
@@ -33,9 +40,24 @@ const Desc = styled.div`
 function Detail({ mockData }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { selected, setSelected } = usePokemon();
+
   const pokemon = mockData.find(p => String(p.id) === id);
 
   if (!pokemon) return <DetailWrap>포켓몬을 찾을 수 없습니다.</DetailWrap>;
+  const isSelected = !!selected.find(p => String(p.id) === id);
+
+  function handleAdd() {
+    if (selected.length >= 6) {
+      alert("더 이상 선택할 수 없습니다.");
+      return;
+    }
+    setSelected([...selected, pokemon]);
+  }
+
+  function handleRemove() {
+    setSelected(selected.filter(p => String(p.id) !== String(pokemon.id)));
+  }
 
   return (
     <DetailWrap>
@@ -44,7 +66,14 @@ function Detail({ mockData }) {
       <div>No. {pokemon.id}</div>
       <div>타입: {pokemon.types && pokemon.types.join(", ")}</div>
       <Desc>{pokemon.description}</Desc>
-      <BackBtn onClick={() => navigate(-1)}>뒤로 가기</BackBtn>
+      <BtnGroup>
+        {isSelected ? (
+          <ActionBtn onClick={handleRemove}>삭제</ActionBtn>
+        ) : (
+          <ActionBtn onClick={handleAdd}>추가</ActionBtn>
+        )}
+        <ActionBtn onClick={() => navigate(-1)}>뒤로 가기</ActionBtn>
+      </BtnGroup>
     </DetailWrap>
   );
 }

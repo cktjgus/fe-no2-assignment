@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 import Home from "./components/Home";
 import Dex from "./components/Dex";
 import Detail from "./components/Detail";
-import mockData from "./mock"; 
+import mockData from "./mock";
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -41,7 +41,11 @@ function App() {
           />
           <Route
             path="/detail/:id"
-            element={<Detail mockData={mockData} />}
+            element={
+              <Detail
+                mockData={mockData}
+                selected={selected}
+                setSelected={setSelected} />}
           />
         </Routes>
       </Router>

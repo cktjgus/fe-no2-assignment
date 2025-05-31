@@ -14,15 +14,23 @@ const DetailWrap = styled.div`
   align-items: center;
 `;
 
-const BackBtn = styled.button`
-  margin-top: 24px;
+const BtnRow = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+`;
+
+const ActionBtn = styled.button`
   background: #b71c1c;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 4px 12px;
+  padding: 4px 18px;
   font-size: 1rem;
   cursor: pointer;
+  &:hover {
+    background: #ff3b3b;
+  }
 `;
 
 const Desc = styled.div`
@@ -30,12 +38,26 @@ const Desc = styled.div`
   text-align: center;
 `;
 
-function Detail({ mockData }) {
+function Detail({ mockData, selected, setSelected }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const pokemon = mockData.find(p => String(p.id) === id);
 
   if (!pokemon) return <DetailWrap>포켓몬을 찾을 수 없습니다.</DetailWrap>;
+
+  const isSelected = !!selected.find(p => String(p.id) === id);
+
+  function handleAdd() {
+    if (selected.length >= 6) {
+      alert("더 이상 선택할 수 없습니다.");
+      return;
+    }
+    setSelected([...selected, pokemon]);
+  }
+
+  function handleRemove() {
+    setSelected(selected.filter(p => String(p.id) !== String(pokemon.id)));
+  }
 
   return (
     <DetailWrap>
@@ -44,7 +66,14 @@ function Detail({ mockData }) {
       <div>No. {pokemon.id}</div>
       <div>타입: {pokemon.types && pokemon.types.join(", ")}</div>
       <Desc>{pokemon.description}</Desc>
-      <BackBtn onClick={() => navigate(-1)}>뒤로 가기</BackBtn>
+      <BtnRow>
+        {isSelected ? (
+          <ActionBtn onClick={handleRemove}>삭제</ActionBtn>
+        ) : (
+          <ActionBtn onClick={handleAdd}>추가</ActionBtn>
+        )}
+        <ActionBtn onClick={() => navigate(-1)}>뒤로 가기</ActionBtn>
+      </BtnRow>
     </DetailWrap>
   );
 }
